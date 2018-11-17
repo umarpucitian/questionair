@@ -10,15 +10,14 @@ use DB;
 
 class QuestionairController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $data['questionairs'] = Questionair::get();
-        dump($data);
+
         return view('Questionairs.index',$data);
     }
 
@@ -89,7 +88,7 @@ class QuestionairController extends Controller
     public function edit($id)
     {
         $data['questionair'] = Questionair::where('id',$id)->first();
-        dump($data);
+
         return view('Questionairs.edit',$data);
     }
 
@@ -156,8 +155,13 @@ class QuestionairController extends Controller
 
     }
 
-    public function addQuestions()
+    public function addQuestions($id)
     {
-        return view('Questionairs.Questions.add');
+        $data['questionair_id'] = $id;
+        return view('Questionairs.Questions.add',$data);
+    }
+    public function storeQuestions(Request $request)
+    {
+        dump($request->all());
     }
 }

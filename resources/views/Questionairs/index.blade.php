@@ -37,8 +37,9 @@
                                 <tr id="tr{{$questionair->id}}">
                                     <td scope="col">{{$questionair->id}}</td>
                                     <td scope="col">{{$questionair->name}}</td>
-                                    <td scope="col">Number of Questions | <a href="{{action('QuestionairController@addQuestions')
-                                    }}">Add</a></td>
+                                    <td scope="col">Number of Questions |
+                                        <a href="{{action('QuestionairController@addQuestions',$questionair->id)}}">Add</a>
+                                    </td>
                                     <td scope="col">{{$questionair->duration}}{{($questionair->duration_type)
                                     ?'hr':'min'}}</td>
                                     <td scope="col">{{($questionair->resume_or_not)?'Yes':'No'}}</td>
@@ -65,30 +66,33 @@
         </div>
     </div>
 @endsection
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{{ asset('js/jquery.min.js') }}" ></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $('body').on('click','.delete',function () {
+            event.preventDefault();
+            var $obj = $(this);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url 	      : $obj.attr('data-url'),
+                type        : 'DELETE',
 
-    $('body').on('click','.delete',function () {
-        event.preventDefault();
-        var $obj = $(this);
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url 	      : $obj.attr('data-url'),
-            type        : 'DELETE',
+                beforeSend: function () {
+                    $obj.attr('disabled', true);
+                },
+                success	: function (response, status) {
+                    alert(response.message)
+                    $('#tr'+response.data).remove();
+                }
 
-            beforeSend: function () {
-                $obj.attr('disabled', true);
-            },
-            success	: function (response, status) {
-                alert(response.message)
-                $('#tr'+response.data).remove();
-            }
+            })
 
         })
+    });
 
-    })
+
 
 </script>
 
