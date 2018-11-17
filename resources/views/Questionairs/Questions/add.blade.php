@@ -22,6 +22,7 @@
                                                 <select id="question1" class="form-control selecter">
                                                     <option value="1">Text</option>
                                                     <option value="2">Multiple Choice (Single Option)</option>
+                                                    <option value="3">Multiple Choice (Multiple Option)</option>
                                                 </select>
                                             </div>
                                             <a href="#" class="col-md-2 delete" id="q1">Delete Question</a>
@@ -62,6 +63,7 @@
                                                 <select id="question2" class="form-control selecter">
                                                     <option value="1">Text</option>
                                                     <option value="2" selected>Multiple Choice (Single Option)</option>
+                                                    <option value="3">Multiple Choice (Multiple Option)</option>
                                                 </select>
                                             </div>
                                             <a href="#" class="col-md-2 delete" id="q2">Delete Question</a>
@@ -90,16 +92,9 @@
                                                                        placeholder="Enter Choice" required>
                                                             </div>
                                                             <div class="col-md-2">
-                                                                {{--<div class="form-check">--}}
-                                                                    {{--<input type="radio" class="form-check-input" id="question2_correct" name="question2_correct">--}}
-                                                                    {{--<label class="form-check-label" for="materialGroupExample1">Correct?</label>--}}
-                                                                {{--</div>--}}
-
-                                                                {{--<label class="form-check-label">--}}
-                                                                    {{--<input type="checkbox" class="form-check-input" value="">Correct?--}}
-                                                                    {{--<input type="radio" name="question2_correct"--}}
-                                                                           {{--value="">Correct?--}}
-                                                                {{--</label>--}}
+                                                                <label class="form-check-label">
+                                                                    <input type="radio" name="question2_correct" value="">Correct?
+                                                                </label>
                                                             </div>
                                                             <a href="#" id="question2_choice_1" class="col-md-2
                                                             delete_choices">Delete Choice</a>
@@ -120,20 +115,17 @@
                                             </div>
                                         </div>
 
-
                                     </div>
 
-                                    <hr />
+                                    <hr/>
                                 </div>
 
                             </div>
 
 
-
-
                             <div class="form-group">
                                 <div class="row">
-                                    <a href="#" class="col-md-2" id="new_question">Add Question</a>
+                                    <a href="javascript:;" class="col-md-2" id="new_question">Add Question</a>
                                 </div>
                             </div>
                             <button id="submit" >submit</button>
@@ -148,7 +140,6 @@
 <script src="{{ asset('js/jquery.min.js') }}" ></script>
 <script type="text/javascript">
     var j=3;
-    var question_no =0;
     var ans_index = 1;
     var choice_index = 5;
     jQuery(document).ready(function() {
@@ -160,15 +151,15 @@
                 '                                    <select id="question'+j+'" class="form-control selecter">\n' +
                 '                                        <option value="0">Select</option>'+
                 '                                        <option value="1">Text</option>\n' +
-                '                                        <option value="2" >Multiple Choice (Single Option)</option>\n' +
+                '                                        <option value="2">Multiple Choice (Single Option)</option>\n' +
+                    '                                    <option value="3">Multiple Choice (Multiple Option)</option>'+
                 '                                    </select>\n' +
                 '                                </div>\n' +
-                    '                <a href="#" class="col-md-2 delete" id="q'+j+'">Delete Question</a>'+
+                    '                <a href="javascript:;" class="col-md-2 delete" id="q'+j+'">Delete Question</a>'+
                 '                            </div>\n' +
                 '                        </div>' +
                 '<div id="question'+j+'_q"></div>' +
                 '<hr /></div>');
-            question_no = j;
             j++;
 
         })
@@ -181,7 +172,6 @@
         })
 
         $('body').on('change','.selecter',function () {
-            debugger
 
             var id = $(this).attr('id')
             var value = $(this).val();
@@ -235,16 +225,10 @@
                     '                                            </div>\n' +
                     '                                            <div class="col-md-2">\n' +
                     '                                                <label class="form-check-label">\n' +
-                    //     '<div class="form-check">\n' +
-                    // ' <input type="radio" class="form-check-input" id="'+id+'_correct" ' +
-                    // 'name="'+id+'_correct">\n' +
-                    // ' <label class="form-check-label" for="materialGroupExample1">Correct?</label>\n' +
-                    // '                                                                </div>'+
-                        // '<input type="radio" name="'+id+'_correct" value="">Correct?'+
-                    // '                                                    <input type="checkbox" class="form-check-input" value="">Correct?\n' +
+                        '<input type="radio" name="'+id+'_correct" value="">Correct?'+
                     '                                                </label>\n' +
                     '                                            </div>\n' +
-                    '                                            <a href="#" id="'+id+'_choices_'+choice_index+'" ' +
+                    '                                            <a href="javascript:;" id="'+id+'_choices_'+choice_index+'" ' +
                     'class="col-md-2' +
                     ' \n' +
                     '                                                        delete_choices">Delete Choice</a>' +
@@ -258,7 +242,57 @@
                     '                                                </div>\n' +
                     '                                                <div class="col-md-2">\n' +
                     '                                                    <a id="'+id+'_choices" ' +
-                    'class="choices" href="#">Add Choice</a>\n' +
+                    'class="choices" href="javascript:;">Add Choice</a>\n' +
+                    '                                                </div>\n' +
+                    '                                                <div class="col-md-2"></div>\n' +
+                    '                                            </div>\n' +
+                    '                                        </div>'+
+                    '\n' +
+                    '                                </div>')
+                choice_index++;
+
+            }
+            else if(value==3) {
+                $('#'+id+'_q').html('<form><input type="hidden" class="q_type" value="2">' +
+                    '\n' +
+                    '                                    <div class="form-group">\n' +
+                    '                                        <div class="row">\n' +
+                    '                                            <label class="col-md-2">Question:</label>\n' +
+                    '                                            <div class="col-md-4">\n' +
+                    '                                                <input type="text" class="form-control"  ' +
+                    'placeholder="Enter Question" name="question[]" required>\n' +
+                    '                                            </div>\n' +
+                    '                                        </div>\n' +
+                    '                                    </div>\n' +
+                    '                            <div id="'+id+'_choices_div">'+
+                    '                                            <div id="'+id+'_choices_'+choice_index+'_s">'+
+                    '                                    <div class="form-group">\n' +
+                    '                                        <div class="row">\n' +
+                    '                                            <label class="col-md-2">Choice </label>\n' +
+                    '                                            <div class="col-md-4">\n' +
+                    '                                                <input type="text" class="form-control" ' +
+                    'name="'+id+'_answer[]" id="" placeholder="Enter Choice" required>\n' +
+                    '                                            </div>\n' +
+                    '                                            <div class="col-md-2">\n' +
+                    '                                                <label class="form-check-label">\n' +
+                    '   <input type="checkbox"  value="">Correct?\n' +
+                    '                                                </label>\n' +
+                    '                                            </div>\n' +
+                    '                                            <a href="javascript:;" id="'+id+'_choices_'+choice_index+'" ' +
+                    'class="col-md-2' +
+                    ' \n' +
+                    '                                                        delete_choices">Delete Choice</a>' +
+                    '                                        </div>\n' +
+                    '                                    </div>\n' +
+                    '                                </div>\n' +
+                    '                                </div></form>\n' +
+                    '<div class="form-group">\n' +
+                    '                                            <div class="row">\n' +
+                    '                                                <div class="col-md-2">\n' +
+                    '                                                </div>\n' +
+                    '                                                <div class="col-md-2">\n' +
+                    '                                                    <a id="'+id+'_choices" ' +
+                    'class="choices" href="javascript:;">Add Choice</a>\n' +
                     '                                                </div>\n' +
                     '                                                <div class="col-md-2"></div>\n' +
                     '                                            </div>\n' +
@@ -278,6 +312,15 @@
             var id = $(this).attr('id');
             var arr = id.split("_");
 
+            var choic = '';
+            if($('#'+arr[0]+' option:selected').val()==2)
+            {
+                choic = '<input type="radio" name="'+arr[0]+'_correct" value="">Correct?';
+            }
+            else if($('#'+arr[0]+' option:selected').val()==3)
+            {
+                choic = '<input type="checkbox"  value="">Correct?';
+            }
 
             $('#'+id+'_div').append('<div id="'+id+'_'+choice_index+'_s"><div class="form-group">\n' +
                 '                                                <div class="row">\n' +
@@ -288,16 +331,10 @@
                 ' placeholder="Enter Choice" required>\n' +
                 '                                                    </div>\n' +
                 '                                                    <div class="col-md-2">\n' +
-                '                                                        <label class="form-check-label">\n' +
-                //     '<div class="form-check">\n' +
-                // '   <input type="radio" class="form-check-input" id="'+arr[0]+'_correct" name="'+arr[0]+'_correct">\n' +
-                // '   <label class="form-check-label" for="materialGroupExample1">Correct?</label>\n' +
-                // '                                                                </div>'+
-                    // '<input type="radio" name="'+arr[0]+'_correct" value="">Correct?'+
-                // '                                                            <input type="checkbox" class="form-check-input" value="">Correct?\n' +
+                '                                                        <label class="form-check-label">\n' +choic+
                 '                                                        </label>\n' +
                 '                                                    </div>\n' +
-                '                                            <a href="#" id="'+id+'_'+choice_index+'" class="col-md-2' +
+                '                                            <a href="javascript:;" id="'+id+'_'+choice_index+'" class="col-md-2' +
                 ' \n' +
                 '                                                        delete_choices">Delete Choice</a>' +
                 '                                                </div>\n' +
@@ -324,21 +361,12 @@
                         var myObj = [];
                         var i = 0;
                         obj.each(function(index) {
-
-                            // if(this.type=='radio' && obj.is(":checked"))
-                            // {
-                            //
-                            // }
-
                             myObj[i] = this.value;
                             i++;
                         } );
 
                         questionsData.push(myObj);
                 }
-                console.log('---------------');
-                console.log(questionsData);
-                console.log('---------------');
 
             });
             var data = JSON.stringify(questionsData);
@@ -347,7 +375,6 @@
                 type: "POST",
                 url:$('#store-question-url').val() ,
                 data: { datas: data,questionair_id:$('#questionair_id').val()},
-
                 dataType: 'json',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 

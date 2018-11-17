@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Questionair;
+use App\Models\QuestionChoices;
 use App\Models\Questions;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -20,15 +21,9 @@ class QuestionairController extends Controller
     {
         $data['questionairs'] = Questionair::User()-> withCount(['questions'])->get();
 
-        dump($data);
         return view('Questionairs.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('Questionairs.add');
@@ -45,12 +40,10 @@ class QuestionairController extends Controller
             return $this->jsonErrorResponse([], $validator->errors());
         }
 
-        // Start transaction!
         DB::beginTransaction();
-        //Questionair creation
 
         try {
-            // Validate, then create if valid
+            //Updating Questionair
             $questionair = new Questionair();
             $questionair->name = !empty($request->questionair_name) ? $request->questionair_name: '';
             $questionair->duration = !empty($request->duration) ? $request->duration : '';
@@ -76,12 +69,7 @@ class QuestionairController extends Controller
         return redirect()->to(action('QuestionairController@index'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
@@ -106,12 +94,10 @@ class QuestionairController extends Controller
             return $this->jsonErrorResponse([], $validator->errors());
         }
 
-        // Start transaction!
         DB::beginTransaction();
-        //Questionair creation
 
         try {
-            // Validate, then create if valid
+            //Updating Questionair
             $questionair =  Questionair::find($id);
             $questionair->name = !empty($request->questionair_name) ? $request->questionair_name: '';
             $questionair->duration = !empty($request->duration) ? $request->duration : '';
@@ -167,17 +153,48 @@ class QuestionairController extends Controller
     public function storeQuestions(Request $request)
     {
         $questions_data = json_decode ($request->input('datas') );
+
         $questionair_id = $request->questionair_id;
 
-        foreach ($questions_data as $data)
-        {
-            $questions = new Questions();
-            $questions->question = $data[1];
-            $questions->question_type =$data[0];
-            $questions->questionair_id = $questionair_id;
-            $questions->save();
-        }
+        DB::beginTransaction();
 
-        return $questions_data;
+        try {
+            //Questions creation
+            foreach ($questions_data as $data)
+            {
+                $questions = new Questions();
+                $questions->question = $data[1];
+                $questions->question_type =$data[0];
+                $questions->questionair_id = $questionair_id;
+                $questions->save();
+
+                foreach ($data as $key=>$dat)
+                {
+                    if($key>1)
+                    {
+                        $choice =new QuestionChoices();
+                        $choice->choices = $dat ;
+                        $choice->question_id = $questions->id ;
+                        $choice->right_choice = 0;
+                        $choice->save();
+                    }
+
+                }
+            }
+
+        }
+        catch(ValidationException $e)
+        {
+            DB::rollback();
+            return $this->jsonErrorResponse([], $e->getMessage(), 200);
+        }
+        catch(Exception $e)
+        {
+            DB::rollback();
+            return $this->jsonErrorResponse([], $e->getMessage(), 200);
+        }
+        DB::commit();
+
+        return response()->json(['status'=>1, 'data'=>[], 'message'=>'Questions added successfully.'], 200);
     }
 }
