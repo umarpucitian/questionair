@@ -37,7 +37,7 @@
                                 <tr id="tr{{$questionair->id}}">
                                     <td scope="col">{{$questionair->id}}</td>
                                     <td scope="col">{{$questionair->name}}</td>
-                                    <td scope="col">Number of Questions |
+                                    <td scope="col">{{$questionair->questions_count}} |
                                         <a href="{{action('QuestionairController@addQuestions',$questionair->id)}}">Add</a>
                                     </td>
                                     <td scope="col">{{$questionair->duration}}{{($questionair->duration_type)

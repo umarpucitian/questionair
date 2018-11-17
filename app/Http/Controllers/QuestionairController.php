@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Questionair;
+use App\Models\Questions;
+use function foo\func;
 use Illuminate\Http\Request;
 use Auth;
 use Validator;
@@ -16,8 +18,9 @@ class QuestionairController extends Controller
     }
     public function index()
     {
-        $data['questionairs'] = Questionair::get();
+        $data['questionairs'] = Questionair::User()-> withCount(['questions'])->get();
 
+        dump($data);
         return view('Questionairs.index',$data);
     }
 
@@ -158,10 +161,23 @@ class QuestionairController extends Controller
     public function addQuestions($id)
     {
         $data['questionair_id'] = $id;
+        $data['questionair'] = Questionair::where('id',$id)->first();
         return view('Questionairs.Questions.add',$data);
     }
     public function storeQuestions(Request $request)
     {
-        dump($request->all());
+        $questions_data = json_decode ($request->input('datas') );
+        $questionair_id = $request->questionair_id;
+
+        foreach ($questions_data as $data)
+        {
+            $questions = new Questions();
+            $questions->question = $data[1];
+            $questions->question_type =$data[0];
+            $questions->questionair_id = $questionair_id;
+            $questions->save();
+        }
+
+        return $questions_data;
     }
 }

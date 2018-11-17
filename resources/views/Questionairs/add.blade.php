@@ -19,14 +19,14 @@
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="questionair_name" name="questionair_name"
-                                               placeholder="name">
+                                               placeholder="name" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Duration</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="duration" id="duration"
-                                               placeholder="Duration">
+                                        <input type="number" class="form-control" name="duration" id="duration"
+                                               placeholder="Duration" required>
                                     </div>
                                     <div class="col-sm-2">
                                         <select  id="duration_type" name="duration_type" class="form-control"  tabindex="3">

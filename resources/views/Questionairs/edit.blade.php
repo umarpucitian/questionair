@@ -22,7 +22,7 @@
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="questionair_name" name="questionair_name"
                                            value="{{$questionair->name}}"
-                                           placeholder="name">
+                                           placeholder="name" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -30,7 +30,7 @@
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="duration" id="duration"
                                            placeholder="Duration"
-                                           value="{{$questionair->duration}}"
+                                           value="{{$questionair->duration}}" required
                                     >
                                 </div>
                                 <div class="col-sm-2">

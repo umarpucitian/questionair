@@ -39,10 +39,11 @@
                     </ul>
                 @else
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <li class="nav-item {{ (stripos($_SERVER['REQUEST_URI'], 'home') !== false)? 'active': ''}} ">
+                            <a class="nav-link" href="{{action('HomeController@index')}}">Home <span class="sr-only">
+                                    (current)</span></a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ (stripos($_SERVER['REQUEST_URI'], 'questionair') !== false)? 'active': ''}}">
                             <a class="nav-link" href="{{action('QuestionairController@index')}}">Questionairs</a>
                         </li>
 

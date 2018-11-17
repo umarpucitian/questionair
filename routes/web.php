@@ -19,5 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('questionair', 'QuestionairController');
-Route::get('add-questions/{id}', 'QuestionairController@addQuestions');
+Route::get('questionair/add-questions/{id}', 'QuestionairController@addQuestions');
 Route::post('store-questions', 'QuestionairController@storeQuestions');
