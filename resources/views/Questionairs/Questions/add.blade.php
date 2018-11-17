@@ -11,7 +11,6 @@
                     <div class="card-header">{{$questionair->name}}</div>
 
                     <div class="card-body">
-                        {{--<form method="post" action="{{action('QuestionairController@storeQuestions')}}">--}}
                             {{csrf_field()}}
                             <div id="questions">
                                 <div id="div_q1">
@@ -130,7 +129,6 @@
                             </div>
                             <button id="submit" >submit</button>
 
-                        {{--</form>--}}
                     </div>
                 </div>
             </div>
@@ -143,6 +141,7 @@
     var ans_index = 1;
     var choice_index = 5;
     jQuery(document).ready(function() {
+        var questions_counter = 2;
         $('#new_question').on('click',function () {
             $('#questions').append('<div id="div_q'+j+'"> <div class="form-group">\n' +
                 '                            <div class="row">\n' +
@@ -161,13 +160,22 @@
                 '<div id="question'+j+'_q"></div>' +
                 '<hr /></div>');
             j++;
+            questions_counter++;
+            if(questions_counter>0)
+            {
+                $('#submit').attr('disabled', false);
+            }
 
         })
-
 
         $('body').on('click','.delete',function () {
             var id = $(this).attr('id');
             $('#div_'+id).remove();
+            questions_counter--;
+            if(questions_counter==0)
+            {
+                $('#submit').attr('disabled', true);
+            }
 
         })
 
@@ -348,6 +356,7 @@
             $('#'+id+'_s').remove();
 
         })
+
         $('#submit').click(function() {
             $(this).attr('disabled', true);
             var questionsData = [];

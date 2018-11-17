@@ -43,7 +43,7 @@ class QuestionairController extends Controller
         DB::beginTransaction();
 
         try {
-            //Updating Questionair
+            //Creating Questionair
             $questionair = new Questionair();
             $questionair->name = !empty($request->questionair_name) ? $request->questionair_name: '';
             $questionair->duration = !empty($request->duration) ? $request->duration : '';
